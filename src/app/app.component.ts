@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+const X = 1;
+const O = 2;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,73 +12,58 @@ export class AppComponent {
   title = 'tic-tac-toe';
   blocks = [0,0,0,0,0,0,0,0,0]
   blockValue = {0: '', 1: "X", 2: "O"};
-  currentPlayer = 1;
+  currentPlayer = X;
 
   select(block,idx) {
-
     if (block != 0) {
       return;
     }
-    if (this.currentPlayer === 1) {
-      this.blocks[idx] = 1;
-      this.currentPlayer = 2;
+    if (this.currentPlayer === X) {
+      this.blocks[idx] = X;
+      this.currentPlayer = O;
     } else {
-      this.blocks[idx] = 2;
-      this.currentPlayer = 1;
+      this.blocks[idx] = O;
+      this.currentPlayer = X;
     }
-
     this.checkWin();
-
   }
 
   checkWin() {
-    let blk = this.blocks;
+    let players = [X,O];
 
-    // Victory conditions
+    let victoryConditions = {
+      'topLine': [0,1,2],
+      'midLine':  [3,4,5],
+      'bottomLine':  [6,7,8],
+      'firstColumn':  [0,3,6],
+      'secondColumn':  [1,4,7],
+      'thirdColumn':  [2,5,8],
+      'diagonalLr':  [0,4,8],
+      'diagonalRl':  [2,4,6]
+    }   
 
-    // top line 0 1 2
-    this.checkCondition(1,0,1,2);
-    this.checkCondition(2,0,1,2);
-    // mid line 3 4 5
-    this.checkCondition(1,3,4,5);
-    this.checkCondition(2,3,4,5);
-    // bottom line 6 7 8
-    this.checkCondition(1,6,7,8);
-    this.checkCondition(2,6,7,8);
-
-    // first column 0 3 6
-    this.checkCondition(1,0,3,6);
-    this.checkCondition(2,0,3,6);
-    // second column 1 4 7
-    this.checkCondition(1,1,4,7);
-    this.checkCondition(2,1,4,7);
-    // third column 2 5 8
-    this.checkCondition(1,2,5,8);
-    this.checkCondition(2,2,5,8);
-
-    // diagonal LR 0 4 8
-    this.checkCondition(1,0,4,8);
-    this.checkCondition(2,0,4,8);
-    // diagonal RL 2 4 6
-    this.checkCondition(1,2,4,6);
-    this.checkCondition(2,2,4,6);
-
+    players.forEach((player)=> {
+      for (const condition in victoryConditions) {
+        this.checkCondition(player,...victoryConditions[condition]);        
+      }
+    })
   }
 
-  checkCondition(player,first,second,third) {
+  checkCondition(player,...numbers) {
     let blk = this.blocks;
+    let first = numbers[0], second = numbers[1], third = numbers[2];
+
     if (blk[first] === player && blk[second] === player && blk[third] === player) {
       player === 1 ? player="X" : player="O";
       alert(`${player} won the game!`);
+      this.reset();
     }
-
   }
 
   reset() {
     this.blocks = [0,0,0,0,0,0,0,0,0];
-    this.currentPlayer = 1;
+    this.currentPlayer = X;
   }
-
 
 }
 

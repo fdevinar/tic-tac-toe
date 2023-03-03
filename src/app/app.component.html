@@ -1,6 +1,5 @@
 <section id="main">
   <h1 class="title">TIC TAC TOE</h1>
-  <!-- <div class="players">Player X / Player O</div> -->
   <div class="players">Next player: <span>{{currentPlayer==1?"X":"O"}}</span></div>
   <div class="board">
     <div class="block" *ngFor="let block of blocks; let idx = index;" (click)="select(block,idx)">
